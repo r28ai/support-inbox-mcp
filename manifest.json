@@ -1,0 +1,308 @@
+{
+  "manifest_version": "0.4",
+  "name": "support-inbox-mcp",
+  "display_name": "Support Inbox to Linear",
+  "version": "0.1.0",
+  "description": "Support email becomes Linear bugs, refunds get handled, and fixed bugs get a reply in-thread.",
+  "author": {
+    "name": "R28 AI, Inc.",
+    "url": "https://r28.ai"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/r28ai/support-inbox-mcp"
+  },
+  "homepage": "https://github.com/r28ai/support-inbox-mcp",
+  "license": "Apache-2.0",
+  "keywords": [
+    "charter",
+    "gmail",
+    "linear",
+    "stripe",
+    "granola",
+    "google docs",
+    "slack",
+    "google calendar",
+    "google drive",
+    "google forms",
+    "notion",
+    "google sheets"
+  ],
+  "server": {
+    "type": "uv",
+    "entry_point": "src/server.py",
+    "mcp_config": {
+      "command": "uv",
+      "args": [
+        "run",
+        "--directory",
+        "${__dirname}",
+        "src/server.py"
+      ],
+      "env": {
+        "GOOGLE_CLIENT_ID": "${user_config.google_client_id}",
+        "GOOGLE_CLIENT_SECRET": "${user_config.google_client_secret}",
+        "LINEAR_API_KEY": "${user_config.linear_api_key}",
+        "STRIPE_API_KEY": "${user_config.stripe_api_key}",
+        "GRANOLA_API_KEY": "${user_config.granola_api_key}",
+        "SLACK_BOT_TOKEN": "${user_config.slack_bot_token}",
+        "NOTION_API_KEY": "${user_config.notion_api_key}"
+      }
+    }
+  },
+  "tools": [
+    {
+      "name": "gmail_threads_list",
+      "description": "List Gmail threads."
+    },
+    {
+      "name": "gmail_threads_get",
+      "description": "Read a Gmail thread."
+    },
+    {
+      "name": "linear_search_issues",
+      "description": "Search issues by text, across titles and descriptions."
+    },
+    {
+      "name": "linear_issue_create",
+      "description": "Create an issue."
+    },
+    {
+      "name": "gmail_drafts_create",
+      "description": "Save an email draft to Gmail."
+    },
+    {
+      "name": "gmail_threads_modify",
+      "description": "Modify the labels on a thread, and so on every message in it."
+    },
+    {
+      "name": "linear_issues_list",
+      "description": "List issues, optionally filtered."
+    },
+    {
+      "name": "linear_attachments_list",
+      "description": "List attachments — the links between Linear issues and things outside it."
+    },
+    {
+      "name": "stripe_customers_retrieve",
+      "description": "Retrieve a single customer by ID."
+    },
+    {
+      "name": "stripe_invoices_list",
+      "description": "List invoices, most recently created first."
+    },
+    {
+      "name": "linear_customer_needs_list",
+      "description": "List customer requests."
+    },
+    {
+      "name": "granola_notes_list",
+      "description": "List meeting notes, filtered by when they were created or last updated and optionally narrowed to one folder and its subfolders."
+    },
+    {
+      "name": "gdocs_documents_create",
+      "description": "Create a blank document with a title."
+    },
+    {
+      "name": "stripe_subscriptions_list",
+      "description": "List subscriptions."
+    },
+    {
+      "name": "slack_chat_post_message",
+      "description": "Send a message to a Slack channel, private group, or DM."
+    },
+    {
+      "name": "gcalendar_events_insert",
+      "description": "Create a calendar event; returns details of the event."
+    },
+    {
+      "name": "gdrive_files_copy",
+      "description": "Create a copy of a file and apply any requested updates with patch semantics."
+    },
+    {
+      "name": "gdrive_permissions_create",
+      "description": "Create a permission for a file or shared drive."
+    },
+    {
+      "name": "gmail_messages_send",
+      "description": "Send an email via the Gmail API."
+    },
+    {
+      "name": "slack_conversations_history",
+      "description": "Fetch recent messages from a Slack channel."
+    },
+    {
+      "name": "linear_customer_need_create",
+      "description": "Record a customer request, optionally attached to an issue or project."
+    },
+    {
+      "name": "stripe_customers_list",
+      "description": "List customers, most recently created first."
+    },
+    {
+      "name": "stripe_charges_list",
+      "description": "List charges, most recently created first."
+    },
+    {
+      "name": "stripe_refunds_create",
+      "description": "Refund a charge."
+    },
+    {
+      "name": "gforms_forms_responses_list",
+      "description": "List a form's submitted responses, newest page first, up to 5000 per page."
+    },
+    {
+      "name": "notion_search",
+      "description": "Search the titles of pages and data sources shared with this integration."
+    },
+    {
+      "name": "notion_pages_create",
+      "description": "Create a page — as a subpage of another page, or as a row of a database by giving its `data_source_id` as the parent."
+    },
+    {
+      "name": "linear_issue_update",
+      "description": "Update an issue."
+    },
+    {
+      "name": "gdrive_files_list",
+      "description": "List the user's files."
+    },
+    {
+      "name": "gsheets_spreadsheets_values_update",
+      "description": "Sets values in a range of a spreadsheet."
+    },
+    {
+      "name": "connection_status",
+      "description": "Which apps this server can reach, and how to connect the rest. Changes nothing."
+    },
+    {
+      "name": "connect",
+      "description": "Connect one app: where to get its key, or the Google sign-in in the browser."
+    }
+  ],
+  "prompts": [
+    {
+      "name": "setup",
+      "description": "Connect the apps this server uses.",
+      "text": "Help me connect the apps this server uses.\n\n1. Call `connection_status` to see what is connected.\n2. For each app it lists as not connected, call `connect` with that app. Where that opens a browser sign-in, tell me to approve it, then move on.\n3. Where an app needs a key, tell me the page to get it from and the exact command to run in my terminal (`support-inbox-mcp login <app>`). Do not ask me to paste a key into this chat.\n4. Call `connection_status` again and tell me what is still missing."
+    },
+    {
+      "name": "support_email_to_linear_bug_with_a_reply_drafted",
+      "description": "Bug reports leave the inbox as issues, and the customer gets a real acknowledgement.",
+      "text": "Support email → Linear bug with a reply drafted. Bug reports leave the inbox as issues, and the customer gets a real acknowledgement.\n\nUse these tools, in this order:\n1. `gmail_threads_list`\n2. `gmail_threads_get`\n3. `linear_search_issues`\n4. `linear_issue_create`\n5. `gmail_drafts_create`\n6. `gmail_threads_modify`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "fixed_to_reply_in_the_original_thread",
+      "description": "Customers who reported a bug hear it's fixed in the same email thread.",
+      "text": "Fixed → reply in the original thread. Customers who reported a bug hear it's fixed in the same email thread.\n\nUse these tools, in this order:\n1. `linear_issues_list`\n2. `linear_attachments_list`\n3. `gmail_threads_get`\n4. `gmail_drafts_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "qbr_account_brief",
+      "description": "Spend, payment issues, open requests and last calls, on one page before the QBR.",
+      "text": "QBR account brief. Spend, payment issues, open requests and last calls, on one page before the QBR.\n\nUse these tools, in this order:\n1. `stripe_customers_retrieve`\n2. `stripe_invoices_list`\n3. `linear_customer_needs_list`\n4. `granola_notes_list`\n5. `gdocs_documents_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "churn_signal_to_save_call",
+      "description": "A cancellation at period end triggers a call while there is still time.",
+      "text": "Churn signal → save call. A cancellation at period end triggers a call while there is still time.\n\nUse these tools, in this order:\n1. `stripe_subscriptions_list`\n2. `granola_notes_list`\n3. `slack_chat_post_message`\n4. `gcalendar_events_insert`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "new_customer_onboarding_kickoff",
+      "description": "Plan doc shared, kickoff booked and welcome sent on day one.",
+      "text": "New customer onboarding kickoff. Plan doc shared, kickoff booked and welcome sent on day one.\n\nUse these tools, in this order:\n1. `stripe_subscriptions_list`\n2. `gdrive_files_copy`\n3. `gdrive_permissions_create`\n4. `gcalendar_events_insert`\n5. `gmail_messages_send`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "customer_slack_channel_to_requests_and_bugs",
+      "description": "Asks in shared channels get tracked and answered with a link.",
+      "text": "Customer Slack channel → requests and bugs. Asks in shared channels get tracked and answered with a link.\n\nUse these tools, in this order:\n1. `slack_conversations_history`\n2. `linear_customer_need_create`\n3. `linear_issue_create`\n4. `slack_chat_post_message`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "refund_request_handled_end_to_end",
+      "description": "The charge is found, the refund issued and the reply drafted, with a human approving the refund.",
+      "text": "Refund request handled end to end. The charge is found, the refund issued and the reply drafted, with a human approving the refund.\n\nUse these tools, in this order:\n1. `gmail_threads_get`\n2. `stripe_customers_list`\n3. `stripe_charges_list`\n4. `stripe_refunds_create`\n5. `gmail_drafts_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "nps_detractor_follow_up",
+      "description": "Low scores from paying accounts get a personal reply and their complaint tracked.",
+      "text": "NPS detractor follow-up. Low scores from paying accounts get a personal reply and their complaint tracked.\n\nUse these tools, in this order:\n1. `gforms_forms_responses_list`\n2. `stripe_customers_list`\n3. `gmail_drafts_create`\n4. `linear_customer_need_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "help_center_gap_finder",
+      "description": "Questions asked three times with no article get a draft article.",
+      "text": "Help-center gap finder. Questions asked three times with no article get a draft article.\n\nUse these tools, in this order:\n1. `gmail_threads_list`\n2. `notion_search`\n3. `notion_pages_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "escalation_runbook",
+      "description": "Priority raised, call booked, customer told: one command instead of four tabs.",
+      "text": "Escalation runbook. Priority raised, call booked, customer told: one command instead of four tabs.\n\nUse these tools, in this order:\n1. `slack_conversations_history`\n2. `linear_issue_update`\n3. `gcalendar_events_insert`\n4. `gmail_drafts_create`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "internal_q_and_a_from_the_docs",
+      "description": "Questions in #ask get answered in-thread from the wiki and Drive, with links.",
+      "text": "Internal Q&A from the docs. Questions in #ask get answered in-thread from the wiki and Drive, with links.\n\nUse these tools, in this order:\n1. `slack_conversations_history`\n2. `notion_search`\n3. `gdrive_files_list`\n4. `slack_chat_post_message`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    },
+    {
+      "name": "account_health_sheet",
+      "description": "Billing state and open bugs per account in one sheet the CS team sorts by.",
+      "text": "Account health sheet. Billing state and open bugs per account in one sheet the CS team sorts by.\n\nUse these tools, in this order:\n1. `stripe_subscriptions_list`\n2. `stripe_invoices_list`\n3. `linear_issues_list`\n4. `gsheets_spreadsheets_values_update`\n\nBefore anything else, check whether any of these tools' apps is not connected: the server's instructions say, and so does `connection_status`. If one is not, tell me how to connect it first, before asking me for anything.\nRead before you write. Before any call that creates, sends, changes or deletes something, show me what it will do and wait for my go-ahead, unless I have told you to go ahead without asking.\nIf a tool says its app is not connected, tell me how to connect it, as the tool says, and stop there."
+    }
+  ],
+  "user_config": {
+    "google_client_id": {
+      "type": "string",
+      "title": "Google: OAuth client ID",
+      "description": "Optional. Your own OAuth client, made at https://console.cloud.google.com/auth/clients; with it set, ask Claude to connect Google.",
+      "sensitive": false,
+      "required": false,
+      "default": ""
+    },
+    "google_client_secret": {
+      "type": "string",
+      "title": "Google: OAuth client secret",
+      "description": "Optional. Your own OAuth client, made at https://console.cloud.google.com/auth/clients; with it set, ask Claude to connect Google.",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "linear_api_key": {
+      "type": "string",
+      "title": "Linear: Personal API key",
+      "description": "Optional. Get it at https://linear.app/settings/account/security",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "stripe_api_key": {
+      "type": "string",
+      "title": "Stripe: Secret or restricted key",
+      "description": "Optional. Get it at https://dashboard.stripe.com/apikeys",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "granola_api_key": {
+      "type": "string",
+      "title": "Granola: API key",
+      "description": "Optional. Get it at https://docs.granola.ai/help-center/sharing/integrations/granola-api",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "slack_bot_token": {
+      "type": "string",
+      "title": "Slack: Bot token (xoxb-…)",
+      "description": "Optional. Get it at https://docs.r28.ai/charter/auth/setup/slack",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    },
+    "notion_api_key": {
+      "type": "string",
+      "title": "Notion: Integration secret (ntn_…)",
+      "description": "Optional. Get it at https://www.notion.so/profile/integrations",
+      "sensitive": true,
+      "required": false,
+      "default": ""
+    }
+  }
+}
